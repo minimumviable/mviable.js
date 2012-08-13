@@ -1,0 +1,8 @@
+#!/bin/bash
+root_dir=`dirname $0`/..
+
+cd $root_dir
+
+# guess-mime-type won't work for extensionless files
+# Maybe this: http://s3tools.org/s3cmd-sync
+s3cmd put --recursive --acl-public --guess-mime-type public/* s3://example.sosimplestorage.com
