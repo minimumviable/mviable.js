@@ -1,8 +1,18 @@
 #!/bin/bash
 root_dir=`dirname $0`/..
 
+bucket=s3://api.minimumviable.com
 cd $root_dir
 
 # guess-mime-type won't work for extensionless files
 # Maybe this: http://s3tools.org/s3cmd-sync
-s3cmd put --recursive --acl-public --guess-mime-type public/* s3://example.sosimplestorage.com
+echo "Syncing javascript"
+s3cmd sync --no-preserve --acl-public -m text/javascript public/js/* $bucket/js
+
+echo "Syncing css"
+s3cmd sync --no-preserve --acl-public -m text/css public/css/* $bucket/css
+
+echo "Syncing html"
+s3cmd put --acl-public --recursive --exclude=css --exclude=js -m text/html public/* $bucket
+
+# Might need a for loop here

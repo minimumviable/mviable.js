@@ -19,7 +19,7 @@
 
     // FIXME Move this to another module for easy testing
     var request = new XMLHttpRequest();
-    var host = localStorage.sosimplehost || 'cloud.sosimplestorage.com:8080'
+    var host = 'cloud.minimumviable.com:8080';
     request.open('POST', 'http://' + host + '/store/sync');
     request.setRequestHeader("Content-Type", "text/plain");
     request.withCredentials = "true";
