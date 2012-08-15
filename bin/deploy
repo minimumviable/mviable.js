@@ -1,18 +1,19 @@
 #!/bin/bash
 root_dir=`dirname $0`/..
 
+defaults="--acl-public --exclude=.DS_Store"
 bucket=s3://api.minimumviable.com
 cd $root_dir
 
 # guess-mime-type won't work for extensionless files
 # Maybe this: http://s3tools.org/s3cmd-sync
 echo "Syncing javascript"
-s3cmd sync --no-preserve --acl-public -m text/javascript public/js/* $bucket/js
+s3cmd sync --no-preserve $defaults -m text/javascript public/js/* $bucket/js/
 
 echo "Syncing css"
-s3cmd sync --no-preserve --acl-public -m text/css public/css/* $bucket/css
+s3cmd sync --no-preserve $defaults -m text/css public/css/* $bucket/css/
 
 echo "Syncing html"
-s3cmd put --acl-public --recursive --exclude=css --exclude=js -m text/html public/* $bucket
+s3cmd put --recursive $defaults --exclude=css --exclude=js -m text/html public/* $bucket
 
 # Might need a for loop here
