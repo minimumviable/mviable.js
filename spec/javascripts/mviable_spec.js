@@ -127,24 +127,8 @@ describe('mviable.js', function() {
       
       // FIXME If the request times out
     });
+    
+    // Detects when a field is deleted FIXME
 
   });
-
-  describe('logging in', function() {
-
-    it('uses the current URL as the default redirect', function() {
-      spyOn(window.location, 'assign').andCallFake(function(url) {
-        expect(url).toEqual("http://cloud.minimumviable.com:8080/login/google?redirect=" + window.location.toString());
-      });
-    });
-
-    xit('redirects to the specified URL on failure', function() {
-      // FIXME
-    });
-  });
-
-  // Submits dirty fields for syncronization
-  // Updates fields returned in the response
-  // Invokes the callback to resolve conflicts
-  // Detects when a field is deleted
 });

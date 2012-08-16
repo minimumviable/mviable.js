@@ -75,7 +75,8 @@
   }
 
   function login(provider) {
-    // CHECK window.location.assign
+    // Untested 
+    // https://groups.google.com/forum/?fromgroups#!topic/sinonjs/MMYrwKIZNUU%5B1-25%5D
     window.location.assign("http://cloud.minimumviable.com:8080/login/" + provider + "?redirect=" + window.location.toString());
   }
 
