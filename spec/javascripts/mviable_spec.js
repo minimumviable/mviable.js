@@ -38,50 +38,51 @@ describe('mviable.js', function() {
     expect(items).toEqual(["item"]);
   });
 
+  it('uses a prefix to avoid colliding with other localStorage data', function() {
+    localStorage.foo = "hello";
+    mviable.setObj("foo", ["world"]);
+    // expect(localStorage.foo).toEqual("hello"); FIXME
+    //expect(mviable.getObj("foo")).toEqual(["world"]); 
+  });
+
   describe('when syncing items', function() {
-    var send, open, setRequestHeader, dataSent, response, listener;
+    var listener, xhr, requests;
 
     beforeEach(function() {
+      xhr = sinon.useFakeXMLHttpRequest();
+      requests = [];
+      xhr.onCreate = function (req) { requests.push(req); };
+      
       listener = jasmine.createSpy('listener');
-      response = {};
-      send = spyOn(XMLHttpRequest.prototype, 'send');
     });
 
-    function request() {
-      return JSON.parse(dataSent);
+    afterEach(function() {
+      xhr.restore;
+    })
+
+    function requestBody(i) {
+      i = i || 0;
+      return JSON.parse(requests[i].requestBody);
     }
 
     describe('successfully', function() {
-      beforeEach(function() {
-        send.andCallFake(function(sentMsg) {
-          dataSent = sentMsg;
-          this.onload({target: {response: JSON.stringify(response)}});
-        });
-      });
-
-      it('uses a prefix to avoid colliding with other localStorage data', function() {
-        localStorage.foo = "hello";
-        mviable.setObj("foo", ["world"]);
-        // expect(localStorage.foo).toEqual("hello"); FIXME
-        //expect(mviable.getObj("foo")).toEqual(["world"]); 
-      });
-
       it('submits a post back to the cloud', function() {
-        var open = spyOn(XMLHttpRequest.prototype, 'open').andCallThrough();
         mviable.setObj('fiz', ["bang"]);
         mviable.sync();
-        expect(open).toHaveBeenCalledWith('POST', "http://cloud.minimumviable.com:8080/store/sync");
+        expect(requests[0].url).toEqual("http://cloud.minimumviable.com:8080/store/sync");
+        expect(requests[0].method).toEqual("POST");
+        expect(requests[0].requestBody).toEqual(JSON.stringify({fiz: ['bang']}));
       });
 
       it('uses text/plain as the content type to avoid additional browser security', function() {
-        var setRequestHeader = spyOn(XMLHttpRequest.prototype, 'setRequestHeader').andCallThrough();
         mviable.sync();
-        expect(setRequestHeader).toHaveBeenCalledWith('Content-Type', 'text/plain');
+        expect(requests[0].requestHeaders).toEqual({"Content-Type": 'text/plain;charset=utf-8'});
       });
 
       it('fires event when a sync is complete', function() {
         mviable.events({ syncSuccessful: listener });
         mviable.sync();
+        requests[0].respond(200, {}, "{}");
         expect(listener).toHaveBeenCalled();
       });
 
@@ -89,46 +90,39 @@ describe('mviable.js', function() {
         beforeEach(function() {
           mviable.setObj("foo", ["bar"]);
           mviable.sync();
+          requests[0].respond(200, {}, JSON.stringify({newItem: true}));
         });
         
         it('sends the item to the server', function() {
-          expect(request()).toEqual({foo: ["bar"]});
+          expect(requestBody()).toEqual({foo: ["bar"]});
         });
 
         it('only syncs changed items', function() {
           mviable.setObj('baz', ["biz"]);
           mviable.sync();
-          expect(request()).toEqual({baz: ["biz"]});
+          expect(requestBody(1)).toEqual({baz: ["biz"]});
         });
 
         it('adds new items to local storage', function() {
-          response.newItem = true;
-          mviable.sync();
           expect(mviable.getObj("newItem")).toEqual(true);
         });
 
         it('marks incoming data as clean and doesnt re-sync it', function() {
-          response.newItem = true;
           mviable.sync();
+          requests[0].respond(200, {}, JSON.stringify({newItem: true}));
+
           mviable.sync();
-          expect(request()).toEqual({});
+          expect(requestBody()).toEqual({});
         });
       });
     });
 
     describe('unsuccessfully', function() {
-      beforeEach(function() {
-        send.andCallFake(function(sentMsg) {
-          dataSent = sentMsg;
-          this.onerror({target: {response: JSON.stringify(response)}});
-        });
-      });
-
       it('fires event if the user has not logged in', function() {
         mviable.events({ loginRequired: listener });
-        // Seems to freak out if you read the status field
-        //mviable.sync(); FIXME Use sinonjs?
-        //expect(listener).toHaveBeenCalled();
+        mviable.sync();
+        requests[0].respond(401, {}, "You must log in first");
+        expect(listener).toHaveBeenCalled();
       });
       
       // FIXME If the request times out

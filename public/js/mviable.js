@@ -23,32 +23,39 @@
     (handlers[name] || []).forEach(function(h) { h(); });
   }
 
-  function sync() {
-    var payload = buildPayload();
-
-    // FIXME Move this to another module for easy testing
-    var request = new XMLHttpRequest();
-    var host = 'cloud.minimumviable.com:8080';
-    request.open('POST', 'http://' + host + '/store/sync');
-    request.setRequestHeader("Content-Type", "text/plain");
-    request.withCredentials = "true";
-    
-    request.onerror = function() {
+  function syncComplete(request, payload) {
+    switch(request.status) {
+      case 401:
+        trigger('loginRequired');
+        break;
+      case 200:
+        var newData = JSON.parse(request.responseText);
+        merge(clean, payload); // FIXME Don't need the data here, just keys
+        merge(localStorage, newData);
+        merge(clean, newData);
+        trigger('syncSuccessful');
+        break;
       // FIXME need to handle many more error states here
       // 402 - Payment Required
       // 413 - Entity Too Large
-      
-      if (request.status === 401) { // Untested
-        trigger('loginRequired');
-      }
+      default:
+        console.log("Error syncing. Unexpected status " + request.status);
     }
+  }
 
-    request.onload = function (e) {
-      trigger('syncSuccessful');
-      var newData = JSON.parse(e.target.response);
-      merge(clean, payload); // FIXME Don't need the data here, just keys
-      merge(localStorage, newData);
-      merge(clean, newData);
+  function sync() {
+    var payload = buildPayload();
+
+    var request = new XMLHttpRequest();
+    var host = 'cloud.minimumviable.com:8080';
+    request.open('POST', 'http://' + host + '/store/sync', true);
+    request.setRequestHeader("Content-Type", "text/plain");
+    request.withCredentials = "true";
+    
+    request.onreadystatechange = function (e) {
+      if (request.readyState === 4) {
+        syncComplete(request, payload);
+      }
     };
     request.send(JSON.stringify(payload)); 
   }
