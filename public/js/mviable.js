@@ -1,6 +1,10 @@
 (function() {
   var clean = {};
   var handlers = {};
+  var host = 'cloud.minimumviable.com:8080';
+  if (window.MViableUseLocalhost) {
+    host = 'localhost:8080';
+  }
 
   function merge(obj, other) {
     for(k in other) {
@@ -9,28 +13,38 @@
     return obj;
   }
 
-  function buildPayload() {
-    var payload = {};
+  function findUpdates() {
+    var updates = {};
     for(k in localStorage) {
-      if(! clean[k]) {
-        payload[k] = JSON.parse(localStorage[k]);
+      if(!(k in clean)) {
+        updates[k] = localStorage[k];
       }
     };
-    return payload;
+    return updates;
+  }
+  
+  function findDeletes() {
+    var deletes = [];
+    for(k in clean) {
+      if(!(k in localStorage)) {
+        deletes.push(k);
+      }
+    };
+    return deletes;
   }
 
   function trigger(name) {
     (handlers[name] || []).forEach(function(h) { h(); });
   }
 
-  function syncComplete(request, payload) {
+  function syncComplete(request, updates) {
     switch(request.status) {
       case 401:
         trigger('loginRequired');
         break;
       case 200:
         var newData = JSON.parse(request.responseText);
-        merge(clean, payload); // FIXME Don't need the data here, just keys
+        merge(clean, updates); // FIXME Don't need the data here, just keys
         merge(localStorage, newData);
         merge(clean, newData);
         trigger('syncSuccessful');
@@ -44,20 +58,22 @@
   }
 
   function sync() {
-    var payload = buildPayload();
+    var updates = findUpdates();
 
     var request = new XMLHttpRequest();
-    var host = 'cloud.minimumviable.com:8080';
     request.open('POST', 'http://' + host + '/store/sync', true);
     request.setRequestHeader("Content-Type", "text/plain");
     request.withCredentials = "true";
     
     request.onreadystatechange = function (e) {
       if (request.readyState === 4) {
-        syncComplete(request, payload);
+        syncComplete(request, updates);
       }
     };
-    request.send(JSON.stringify(payload)); 
+    request.send(JSON.stringify({
+      updates: updates,
+      deletes: findDeletes()
+    })); 
   }
 
   function getObj(name) {
@@ -77,7 +93,7 @@
   function login(provider) {
     // Untested 
     // https://groups.google.com/forum/?fromgroups#!topic/sinonjs/MMYrwKIZNUU%5B1-25%5D
-    window.location.assign("http://cloud.minimumviable.com:8080/login/" + provider + "?redirect=" + window.location.toString());
+    window.location.assign("http://" + host + "/login/" + provider + "?redirect=" + window.location.toString());
   }
 
   function events(newHandlers) {
@@ -95,10 +111,10 @@
     setObj: setObj
   }
 
-  if (Object.defineProperty) {
+  if (window.localStorage) {
     Object.defineProperty(this, "mviable", {value: exports});
   } else {
-    console.log("Sorry, mviable.js does not support legacy browsers.");
+    console.log("Sorry, mviable.js does not support browsers without Local Storage.");
   }
 })();
 

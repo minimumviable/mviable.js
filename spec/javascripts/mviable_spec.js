@@ -38,13 +38,6 @@ describe('mviable.js', function() {
     expect(items).toEqual(["item"]);
   });
 
-  it('uses a prefix to avoid colliding with other localStorage data', function() {
-    localStorage.foo = "hello";
-    mviable.setObj("foo", ["world"]);
-    // expect(localStorage.foo).toEqual("hello"); FIXME
-    //expect(mviable.getObj("foo")).toEqual(["world"]); 
-  });
-
   describe('when syncing items', function() {
     var listener, xhr, requests;
 
@@ -67,11 +60,14 @@ describe('mviable.js', function() {
 
     describe('successfully', function() {
       it('submits a post back to the cloud', function() {
-        mviable.setObj('fiz', ["bang"]);
+        localStorage.fiz = "bang";
         mviable.sync();
         expect(requests[0].url).toEqual("http://cloud.minimumviable.com:8080/store/sync");
         expect(requests[0].method).toEqual("POST");
-        expect(requests[0].requestBody).toEqual(JSON.stringify({fiz: ['bang']}));
+        expect(JSON.parse(requests[0].requestBody)).toEqual({
+          deletes: {},
+          updates: {fiz: 'bang'}
+        });
       });
 
       it('uses text/plain as the content type to avoid additional browser security', function() {
@@ -88,23 +84,29 @@ describe('mviable.js', function() {
 
       describe('after an item has been synced', function() {
         beforeEach(function() {
-          mviable.setObj("foo", ["bar"]);
+          localStorage.foo = "bar";
           mviable.sync();
           requests[0].respond(200, {}, JSON.stringify({newItem: true}));
         });
         
         it('sends the item to the server', function() {
-          expect(requestBody()).toEqual({foo: ["bar"]});
+          expect(requestBody().updates).toEqual({foo: "bar"});
+        });
+
+        it('removes deleted items', function() {
+          delete localStorage.foo;
+          mviable.sync();
+          expect(requestBody(1).deletes).toEqual(["foo"]);
         });
 
         it('only syncs changed items', function() {
-          mviable.setObj('baz', ["biz"]);
+          localStorage.baz = "biz"
           mviable.sync();
-          expect(requestBody(1)).toEqual({baz: ["biz"]});
+          expect(requestBody(1).updates).toEqual({baz: "biz"});
         });
 
         it('adds new items to local storage', function() {
-          expect(mviable.getObj("newItem")).toEqual(true);
+          expect(localStorage.newItem).toEqual("true");
         });
 
         it('marks incoming data as clean and doesnt re-sync it', function() {
@@ -112,7 +114,7 @@ describe('mviable.js', function() {
           requests[0].respond(200, {}, JSON.stringify({newItem: true}));
 
           mviable.sync();
-          expect(requestBody()).toEqual({});
+          expect(requestBody().updates).toEqual({});
         });
       });
     });
@@ -127,8 +129,5 @@ describe('mviable.js', function() {
       
       // FIXME If the request times out
     });
-    
-    // Detects when a field is deleted FIXME
-
   });
 });
