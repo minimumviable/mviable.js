@@ -65,7 +65,8 @@ describe('mviable.js', function() {
         expect(requests[0].url).toEqual("http://cloud.minimumviable.com:8080/store/sync");
         expect(requests[0].method).toEqual("POST");
         expect(JSON.parse(requests[0].requestBody)).toEqual({
-          deletes: {},
+          deletes: [],
+          versions: {},
           updates: {fiz: 'bang'}
         });
       });
@@ -78,7 +79,11 @@ describe('mviable.js', function() {
       it('fires event when a sync is complete', function() {
         mviable.events({ syncSuccessful: listener });
         mviable.sync();
-        requests[0].respond(200, {}, "{}");
+        requests[0].respond(200, {}, JSON.stringify({
+          deletes: [],
+          updates: {},
+          versions: {}
+        }));
         expect(listener).toHaveBeenCalled();
       });
 
@@ -86,17 +91,31 @@ describe('mviable.js', function() {
         beforeEach(function() {
           localStorage.foo = "bar";
           mviable.sync();
-          requests[0].respond(200, {}, JSON.stringify({newItem: true}));
+          requests[0].respond(200, {}, JSON.stringify({
+            updates: {newItem: true},
+            deletes: [],
+            versions: {newItem: 1}
+          }));
         });
         
         it('sends the item to the server', function() {
           expect(requestBody().updates).toEqual({foo: "bar"});
         });
 
-        it('removes deleted items', function() {
+        it('marks deleted items for removal', function() {
           delete localStorage.foo;
           mviable.sync();
           expect(requestBody(1).deletes).toEqual(["foo"]);
+        });
+
+        it('removes items deleted on the server', function() {
+          mviable.sync();
+          requests[1].respond(200, {}, JSON.stringify({
+            updates: {},
+            deletes: ['foo'],
+            versions: {}
+          }));
+          expect(localStorage.foo).toBeUndefined();
         });
 
         it('only syncs changed items', function() {
@@ -111,7 +130,11 @@ describe('mviable.js', function() {
 
         it('marks incoming data as clean and doesnt re-sync it', function() {
           mviable.sync();
-          requests[0].respond(200, {}, JSON.stringify({newItem: true}));
+          requests[0].respond(200, {}, JSON.stringify({
+            updates: {newItem: true},
+            deletes: [],
+            versions: {}
+          }));
 
           mviable.sync();
           expect(requestBody().updates).toEqual({});

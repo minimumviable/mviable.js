@@ -1,4 +1,5 @@
 (function() {
+  var versions = {};
   var clean = {};
   var handlers = {};
   var host = 'cloud.minimumviable.com:8080';
@@ -45,8 +46,12 @@
       case 200:
         var newData = JSON.parse(request.responseText);
         merge(clean, updates); // FIXME Don't need the data here, just keys
-        merge(localStorage, newData);
-        merge(clean, newData);
+        merge(localStorage, newData.updates);
+        merge(clean, newData.updates);
+        merge(versions, newData.versions);
+        newData.deletes.forEach(function(k) {
+          delete localStorage[k];
+        })
         trigger('syncSuccessful');
         break;
       // FIXME need to handle many more error states here
@@ -72,6 +77,7 @@
     };
     request.send(JSON.stringify({
       updates: updates,
+      versions: versions,
       deletes: findDeletes()
     })); 
   }
