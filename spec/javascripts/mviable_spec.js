@@ -70,6 +70,7 @@ describe('mviable.js', function() {
         expect(requests[0].method).toEqual("POST");
         expect(JSON.parse(requests[0].requestBody)).toEqual({
           deletes: [],
+          versions: {fiz: 0},
           updates: {fiz: 'bang'}
         });
       });
@@ -77,6 +78,12 @@ describe('mviable.js', function() {
       it('uses text/plain as the content type to avoid additional browser security', function() {
         mviable.sync();
         expect(requests[0].requestHeaders).toEqual({"Content-Type": 'text/plain;charset=utf-8'});
+      });
+
+      it('send the version number to the server', function() {
+        localStorage.foo = "bar";
+        mviable.sync();
+        expect(requestBody().versions).toEqual({foo: 0});
       });
 
       it('fires event when a sync is complete', function() {
@@ -97,8 +104,18 @@ describe('mviable.js', function() {
           requests[0].respond(200, {}, JSON.stringify({
             updates: {newItem: true},
             deletes: [],
-            versions: {newItem: 1}
+            versions: {newItem: 1, foo: 1}
           }));
+        });
+
+        it('syncs existing items when they change', function() {
+          localStorage.foo = "baz";
+          mviable.sync();
+          expect(requestBody(1)).toEqual({
+            updates: {foo: "baz"},
+            versions: {newItem: 1, foo: 2},
+            deletes: []
+          });
         });
         
         it('sends the item to the server', function() {
@@ -131,16 +148,21 @@ describe('mviable.js', function() {
           expect(localStorage.newItem).toEqual("true");
         });
 
-        it('marks incoming data as clean and doesnt re-sync it', function() {
-          mviable.sync();
-          requests[0].respond(200, {}, JSON.stringify({
-            updates: {newItem: true},
+        function respond(i, obj) {
+          requests[i].respond(200, {}, JSON.stringify(_.extend({
+            updates: {},
             deletes: [],
             versions: {}
-          }));
+          }, obj || {})));
+        }
+
+        it('marks incoming data as clean and doesnt re-sync it', function() {
+          mviable.sync();
+          respond(0, {updates: {newItem: true}});
 
           mviable.sync();
-          expect(requestBody().updates).toEqual({});
+          respond(1);
+          expect(requestBody(1).updates).toEqual({});
         });
       });
     });

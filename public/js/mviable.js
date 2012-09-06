@@ -6,8 +6,29 @@
     host = 'localhost:8080';
   }
 
+  function hashString(str){
+    str = (str || "").toString();
+
+    var hash = 0;
+    for (i = 0; i < str.length; i++) {
+      char = str.charCodeAt(i);
+      hash = char + (hash << 6) + (hash << 16) - hash;
+    }
+    return hash;
+  }
+
+  function hashValues(obj) {
+    var hashed = {};
+    for(k in obj) {
+      hashed[k] = hashString(obj[k]);
+    }
+    return hashed;
+  }
+  
+
   function setOption(name, value) {
     setObj("__mviable__", function(o) {
+      o = o || {};
       o[name] = value;
       return o;
     });
@@ -19,7 +40,10 @@
 
   function mergeOption(name, other) {
     setObj("__mviable__", function(o) {
-      return merge(o || {}, other);
+      o = o || {};
+      o[name] = o[name] || {};
+      merge(o[name], other);
+      return o;
     });
   }
 
@@ -32,11 +56,15 @@
 
   function findUpdates() {
     var updates = {};
+    var v = getOption('versions') || {};
+    var hashes = getOption("hashes") || {};
     for(k in localStorage) {
-      if(!(k in clean)) {
+      if((hashes[k] !== hashString(localStorage[k])) && k !== "__mviable__") {
         updates[k] = localStorage[k];
+        v[k] = (v[k] || -1) + 1;
       }
     };
+    setOption('versions', v);
     return updates;
   }
   
@@ -62,6 +90,8 @@
       case 200:
         var newData = JSON.parse(request.responseText);
         merge(clean, updates); // FIXME Don't need the data here, just keys
+        mergeOption('hashes', hashValues(newData.updates)); 
+        mergeOption('hashes', hashValues(updates)); 
         merge(localStorage, newData.updates);
         merge(clean, newData.updates);
         mergeOption('versions', newData.versions);
