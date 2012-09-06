@@ -57,6 +57,14 @@ describe('mviable.js', function() {
       xhr.restore;
     })
 
+    function respond(i, obj) {
+      requests[i].respond(200, {}, JSON.stringify(_.extend({
+        updates: {},
+        deletes: [],
+        versions: {}
+      }, obj || {})));
+    }
+
     function requestBody(i) {
       i = i || 0;
       return JSON.parse(requests[i].requestBody);
@@ -89,11 +97,7 @@ describe('mviable.js', function() {
       it('fires event when a sync is complete', function() {
         mviable.events({ syncSuccessful: listener });
         mviable.sync();
-        requests[0].respond(200, {}, JSON.stringify({
-          deletes: [],
-          updates: {},
-          versions: {}
-        }));
+        respond(0);
         expect(listener).toHaveBeenCalled();
       });
 
@@ -101,11 +105,10 @@ describe('mviable.js', function() {
         beforeEach(function() {
           localStorage.foo = "bar";
           mviable.sync();
-          requests[0].respond(200, {}, JSON.stringify({
+          respond(0, { 
             updates: {newItem: true},
-            deletes: [],
             versions: {newItem: 1, foo: 1}
-          }));
+          });
         });
 
         it('syncs existing items when they change', function() {
@@ -130,11 +133,7 @@ describe('mviable.js', function() {
 
         it('removes items deleted on the server', function() {
           mviable.sync();
-          requests[1].respond(200, {}, JSON.stringify({
-            updates: {},
-            deletes: ['foo'],
-            versions: {}
-          }));
+          respond(1, { deletes: ['foo'] });
           expect(localStorage.foo).toBeUndefined();
         });
 
@@ -147,14 +146,6 @@ describe('mviable.js', function() {
         it('adds new items to local storage', function() {
           expect(localStorage.newItem).toEqual("true");
         });
-
-        function respond(i, obj) {
-          requests[i].respond(200, {}, JSON.stringify(_.extend({
-            updates: {},
-            deletes: [],
-            versions: {}
-          }, obj || {})));
-        }
 
         it('marks incoming data as clean and doesnt re-sync it', function() {
           mviable.sync();
