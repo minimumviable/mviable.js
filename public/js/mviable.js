@@ -1,5 +1,4 @@
 (function() {
-  var clean = {};
   var handlers = {};
   var host = 'cloud.minimumviable.com:8080';
   if (window.MViableUseLocalhost) {
@@ -34,8 +33,8 @@
     });
   }
 
-  function getOption(name, value) {
-    return (getObj("__mviable__") || {})[name];
+  function getOption(name) {
+    return (getObj("__mviable__") || {})[name] || {};
   }
 
   function mergeOption(name, other) {
@@ -56,8 +55,8 @@
 
   function findUpdates() {
     var updates = {};
-    var v = getOption('versions') || {};
-    var hashes = getOption("hashes") || {};
+    var v = getOption('versions');
+    var hashes = getOption("hashes");
     for(k in localStorage) {
       if((hashes[k] !== hashString(localStorage[k])) && k !== "__mviable__") {
         updates[k] = localStorage[k];
@@ -70,7 +69,7 @@
   
   function findDeletes() {
     var deletes = [];
-    for(k in clean) {
+    for(k in getOption('hashes')) {
       if(!(k in localStorage)) {
         deletes.push(k);
       }
@@ -89,15 +88,16 @@
         break;
       case 200:
         var newData = JSON.parse(request.responseText);
-        merge(clean, updates); // FIXME Don't need the data here, just keys
-        mergeOption('hashes', hashValues(newData.updates)); 
-        mergeOption('hashes', hashValues(updates)); 
-        merge(localStorage, newData.updates);
-        merge(clean, newData.updates);
-        mergeOption('versions', newData.versions);
         newData.deletes.forEach(function(k) {
           delete localStorage[k];
-        })
+        });
+
+        // FIXME May fail here if storage is full
+        merge(localStorage, newData.updates);
+
+        mergeOption('hashes', hashValues(newData.updates)); 
+        mergeOption('hashes', hashValues(updates)); 
+        mergeOption('versions', newData.versions);
         trigger('syncSuccessful');
         break;
       // FIXME need to handle many more error states here

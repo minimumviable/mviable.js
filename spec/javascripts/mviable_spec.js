@@ -137,6 +137,13 @@ describe('mviable.js', function() {
           expect(localStorage.foo).toBeUndefined();
         });
 
+        it('adds previously deleted items', function() {
+          //FIXME
+          // Delete
+          // Update
+          // Add same value
+        });
+
         it('only syncs changed items', function() {
           localStorage.baz = "biz"
           mviable.sync();
