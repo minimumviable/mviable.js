@@ -3,6 +3,10 @@ describe('mviable.js', function() {
     localStorage.clear();
   });
 
+  it('reports if the user is logged in', function() {
+    expect(mviable.hasAuth()).toEqual(false);
+  });
+
   it('can store objects', function() {
     mviable.setObj('greeting', {Hello: "World"});
     expect(mviable.getObj('greeting')).toEqual({Hello: "World"});
@@ -66,7 +70,6 @@ describe('mviable.js', function() {
         expect(requests[0].method).toEqual("POST");
         expect(JSON.parse(requests[0].requestBody)).toEqual({
           deletes: [],
-          versions: {},
           updates: {fiz: 'bang'}
         });
       });

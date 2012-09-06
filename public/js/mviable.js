@@ -1,10 +1,26 @@
 (function() {
-  var versions = {};
   var clean = {};
   var handlers = {};
   var host = 'cloud.minimumviable.com:8080';
   if (window.MViableUseLocalhost) {
     host = 'localhost:8080';
+  }
+
+  function setOption(name, value) {
+    setObj("__mviable__", function(o) {
+      o[name] = value;
+      return o;
+    });
+  }
+
+  function getOption(name, value) {
+    return (getObj("__mviable__") || {})[name];
+  }
+
+  function mergeOption(name, other) {
+    setObj("__mviable__", function(o) {
+      return merge(o || {}, other);
+    });
   }
 
   function merge(obj, other) {
@@ -48,7 +64,7 @@
         merge(clean, updates); // FIXME Don't need the data here, just keys
         merge(localStorage, newData.updates);
         merge(clean, newData.updates);
-        merge(versions, newData.versions);
+        mergeOption('versions', newData.versions);
         newData.deletes.forEach(function(k) {
           delete localStorage[k];
         })
@@ -77,7 +93,7 @@
     };
     request.send(JSON.stringify({
       updates: updates,
-      versions: versions,
+      versions: getOption('versions'),
       deletes: findDeletes()
     })); 
   }
@@ -94,6 +110,10 @@
     } 
     // FIXME This may throw QUOTA_EXCEEDED_ERR
     localStorage.setItem(name, JSON.stringify(obj));
+  }
+
+  function hasAuth() {
+    return false;
   }
 
   function login(provider) {
@@ -113,6 +133,7 @@
     login: login,
     sync: sync,
     events: events,
+    hasAuth: hasAuth,
     getObj: getObj,
     setObj: setObj
   }
