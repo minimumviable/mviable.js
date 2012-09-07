@@ -116,7 +116,7 @@ describe('mviable.js', function() {
           mviable.sync();
           expect(requestBody(1)).toEqual({
             updates: {foo: "baz"},
-            versions: {newItem: 1, foo: 2},
+            versions: {newItem: 1, foo: 1},
             deletes: []
           });
         });
@@ -131,17 +131,20 @@ describe('mviable.js', function() {
           expect(requestBody(1).deletes).toEqual(["foo"]);
         });
 
+        it('adds previously deleted items', function() {
+          delete localStorage.foo;
+          mviable.sync();
+          respond(1);
+
+          localStorage.foo = 'bar';
+          mviable.sync();
+          expect(requestBody(2).updates).toEqual({foo: 'bar'});
+        });
+
         it('removes items deleted on the server', function() {
           mviable.sync();
           respond(1, { deletes: ['foo'] });
           expect(localStorage.foo).toBeUndefined();
-        });
-
-        it('adds previously deleted items', function() {
-          //FIXME
-          // Delete
-          // Update
-          // Add same value
         });
 
         it('only syncs changed items', function() {

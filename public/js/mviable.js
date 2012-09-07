@@ -60,7 +60,7 @@
     for(k in localStorage) {
       if((hashes[k] !== hashString(localStorage[k])) && k !== "__mviable__") {
         updates[k] = localStorage[k];
-        v[k] = (v[k] || -1) + 1;
+        v[k] = v[k] || 0;
       }
     };
     setOption('versions', v);
@@ -81,7 +81,13 @@
     (handlers[name] || []).forEach(function(h) { h(); });
   }
 
-  function syncComplete(request, updates) {
+  function removeHash(k) {
+    var h = getOption('hashes');
+    delete h[k];
+    setOption('hashes', h);
+  }
+
+  function syncComplete(request, updates, deletes) {
     switch(request.status) {
       case 401:
         trigger('loginRequired');
@@ -90,7 +96,9 @@
         var newData = JSON.parse(request.responseText);
         newData.deletes.forEach(function(k) {
           delete localStorage[k];
+          removeHash(k); // Untested
         });
+        deletes.forEach(function(k) { removeHash(k); });
 
         // FIXME May fail here if storage is full
         merge(localStorage, newData.updates);
@@ -110,6 +118,7 @@
 
   function sync() {
     var updates = findUpdates();
+    var deletes = findDeletes();
 
     var request = new XMLHttpRequest();
     request.open('POST', 'http://' + host + '/store/sync', true);
@@ -118,13 +127,13 @@
     
     request.onreadystatechange = function (e) {
       if (request.readyState === 4) {
-        syncComplete(request, updates);
+        syncComplete(request, updates, deletes);
       }
     };
     request.send(JSON.stringify({
       updates: updates,
       versions: getOption('versions'),
-      deletes: findDeletes()
+      deletes: deletes
     })); 
   }
 
