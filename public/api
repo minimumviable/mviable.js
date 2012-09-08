@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="screen" charset="utf-8">
+    <script type="text/javascript" charset="utf-8" src="/js/mviable.js"></script>
+
+    <title>Minimum Viable -- Developer Center -- API</title>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Minimum Viable [Developer Center]</h1>
+    </div>
+    <div id="methods">
+      <div class="method">
+        <a id="authentication"></a>
+        <div class="method-description">
+          <h3>Authentication</h3>
+          <p>Minimum Viable requires that users of an application login using an OAuth2 provider (such as Google or Facebook) before they can syncronize data. Your application can begin the login process by invoking the <code>login</code> function. This will redirect the current page to the provider's authorization URL, and once the process is complete, redirect back the current page.</p>
+          <h4>Method</h4>
+          <code>mviable.login(<i>provider</i>)</code>
+          <h4>Parameters</h4>
+          <ul>
+            <li>provider - Minimum Viable provides support for OAuth2 Authentication via one of the following providers:
+              <ul>
+                <li>google</li>
+                <!-- <li>facebook</li> -->
+                <!-- <li>twitter</li> -->
+              </ul>
+            </li>
+            <!-- <li>redirectURL</li> --> 
+          </ul>
+          <!-- <p>After invoking this function, either the loginSucessful or loginFailed events will be fired. See <a href="#events">events</a> for more info</p> -->
+        </div>
+        <div class="method-example">
+          <code>
+            mviable.login('google');
+          </code>
+        </div>
+      </div>
+    </div>
+    <script>
+        var _gaq=[['_setAccount','UA-34674102-1'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
+  </body>
+</html>
