@@ -82,6 +82,13 @@ body {
     border-top: 20px solid #2531B2;
 }
 
+.main aside a {
+    color: white;
+}
+.main a aside a:visited {
+    color: #ffd94e;
+}
+
 .header-container,
 .footer-container,
 .main aside {
@@ -157,19 +164,7 @@ nav a:hover {
    Author's custom styles
    ========================================================================== */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+.gist-meta { display: none; }
 
 /* ==========================================================================
    Media Queries
