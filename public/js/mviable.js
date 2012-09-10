@@ -1,3 +1,8 @@
+/**
+ * Minimum Viable's JavaScript API
+ *
+ * @module mviable
+ */
 (function() {
   var handlers = {};
   var host = 'cloud.minimumviable.com:8080';
@@ -155,6 +160,13 @@
     return false;
   }
 
+  /**
+   * Redirects the user to the specififed OAuth2 provider's login page.
+   *
+   * @method login
+   * @param {String} provider OAuth2 provider. 'google' is currently the only supported option.
+   * @for mviable
+   */
   function login(provider) {
     // Untested 
     // https://groups.google.com/forum/?fromgroups#!topic/sinonjs/MMYrwKIZNUU%5B1-25%5D
