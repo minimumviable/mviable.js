@@ -1,8 +1,7 @@
-/**
- * Minimum Viable's JavaScript API
- *
- * @module mviable
- */
+/** 
+ * @namespace mviable 
+ * @desc Minimum Viable's JavaScript API
+ * */
 (function() {
   var handlers = {};
   var host = 'cloud.minimumviable.com:8080';
@@ -121,6 +120,12 @@
     }
   }
 
+  /**
+   * If the user is logged in, synchronizes data in localStorage with Minimum Viable's cloud storage.
+   * 
+   * @function 
+   * @name mviable#sync
+   */
   function sync() {
     var updates = findUpdates();
     var deletes = findDeletes();
@@ -161,11 +166,12 @@
   }
 
   /**
-   * Redirects the user to the specififed OAuth2 provider's login page.
+   * Redirects the user to the specififed OAuth2 provider's login page. When the login 
+   * process is complete, the user will be redirected back to the current page.
    *
-   * @method login
+   * @function mviable#sync
+   * @name mviable#login
    * @param {String} provider OAuth2 provider. 'google' is currently the only supported option.
-   * @for mviable
    */
   function login(provider) {
     // Untested 
