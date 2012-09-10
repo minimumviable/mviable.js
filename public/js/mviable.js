@@ -81,6 +81,21 @@
     return deletes;
   }
 
+  /**
+   * Fired when a sync fails because the user has not logged in
+   *
+   * @event
+   * @name mviable#loginRequired
+   * @see mviable#events
+   */
+
+  /**
+   * Fired after a syncronization has successfully completed
+   *
+   * @event
+   * @name mviable#syncSuccessful
+   * @see mviable#events
+   */
   function trigger(name) {
     (handlers[name] || []).forEach(function(h) { h(); });
   }
@@ -161,24 +176,34 @@
     localStorage.setItem(name, JSON.stringify(obj));
   }
 
-  function hasAuth() {
-    return false;
-  }
-
   /**
    * Redirects the user to the specififed OAuth2 provider's login page. When the login 
    * process is complete, the user will be redirected back to the current page.
    *
-   * @function mviable#sync
+   * @function 
    * @name mviable#login
    * @param {String} provider OAuth2 provider. 'google' is currently the only supported option.
    */
   function login(provider) {
-    // Untested 
+    // Untested because:
     // https://groups.google.com/forum/?fromgroups#!topic/sinonjs/MMYrwKIZNUU%5B1-25%5D
     window.location.assign("http://" + host + "/login/" + provider + "?redirect=" + window.location.toString());
   }
 
+  /**
+   * Registers one or more event listeners with mviable.
+   *
+   * @function 
+   * @name mviable#events
+   * @param {Object} handlers A config object where the keys represent event names, and the values 
+   * are functions to be invoked when the event is fired.
+   * @example
+   * mviable.events({ 
+   *   syncSuccessful: function() { console.log("Sync Successful"); }
+   *   loginRequired: function() { console.log("Need to call mviable.login"); }
+   * });
+   * 
+   */
   function events(newHandlers) {
     for(e in newHandlers) {
       handlers[e] = handlers[e] || [];
@@ -190,7 +215,6 @@
     login: login,
     sync: sync,
     events: events,
-    hasAuth: hasAuth,
     getObj: getObj,
     setObj: setObj
   }
