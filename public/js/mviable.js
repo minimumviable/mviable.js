@@ -137,7 +137,11 @@
 
   /**
    * If the user is logged in, synchronizes data in localStorage with Minimum Viable's cloud storage.
-   * 
+   *
+   * When a sync is triggered, each key/value pair in localStorage is inspected to see if it has changed.
+   * A request is then made to Minimum Viable's cloud storage to save new/changed values, and fetch any 
+   * values that may have been added or updated on other clients.
+   *
    * @function 
    * @name mviable#sync
    */
