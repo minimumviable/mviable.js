@@ -25,8 +25,8 @@
                 <h1 class="title">Minimum Viable [Tutorials]</h1>
                 <nav>
                     <ul>
-                        <li><a href="/api">API</a></li>
-                        <li><a href="/tutorials">Tutorials</a></li>
+                        <li><a href="/api/mviable.html">API</a></li>
+                        <li><a href="https://github.com/minimumviable/mviable.js/wiki/Tutorials">Tutorials</a></li>
                         <li><a href="/sampleApps">Sample Apps</a></li>
                     </ul>
                 </nav>
@@ -38,18 +38,14 @@
 
                 <article>
                     <section>
-                        <h2>Sketchy</h2>
-                        <p>
-                          <a href="http://github.com/minimumviable/sketchy">Code on Github</a>
-                        </p>
-                        <p>A sketchpad based on Canvas2D.</p>
-                    </section>
-                    <section>
                         <h2>SimpleNote</h2>
+                        <p>The simplest notes app that could possibly work.</p>
+                        <p>
+                          <a href="http://notes.minimumviable.com">Live App</a>
+                        </p>
                         <p>
                           <a href="http://github.com/minimumviable/simplenote">Code on Github</a>
                         </p>
-                        <p>The simplest notes app that could possibly work.</p>
                     </section>
                 </article>
 
