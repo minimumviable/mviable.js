@@ -3,10 +3,6 @@ describe('mviable.js', function() {
     localStorage.clear();
   });
 
-  it('reports if the user is logged in', function() {
-    expect(mviable.hasAuth()).toEqual(false);
-  });
-
   it('can store objects', function() {
     mviable.setObj('greeting', {Hello: "World"});
     expect(mviable.getObj('greeting')).toEqual({Hello: "World"});
