@@ -3,14 +3,18 @@ layout: 'default'
 title: 'Interactive Tutorials'
 ---
 
-<div id="TOC">
-  <h2>Interactive Tutorials</h2>
-  <ul>
-    <li>
-      <a href="auth">Login</a>
-    </li>
-    <li>
-      <a href="sync">Synchronization</a>
-    </li>
-  </ul>
-</div>
+<article>
+    <section>
+      <div id="TOC">
+        <h2>Interactive Tutorials</h2>
+        <ul>
+          <li>
+            <a href="auth">Login</a>
+          </li>
+          <li>
+            <a href="sync">Synchronization</a>
+          </li>
+        </ul>
+      </div>
+  </section>
+</article>

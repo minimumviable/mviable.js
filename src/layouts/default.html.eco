@@ -24,7 +24,7 @@
 	<meta name="viewport" content="width=device-width" />
 
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
-	<%- @getBlock('styles').add(["/normalize.css", "/main.css"]).toHTML() %>
+	<%- @getBlock('styles').add(["/css/normalize.css", "/css/main.css"]).toHTML() %>
 
 	<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 </head>
