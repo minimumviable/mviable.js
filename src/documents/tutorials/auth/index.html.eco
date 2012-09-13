@@ -1,0 +1,31 @@
+---
+layout: 'default'
+title: 'Authentication Tutorial'
+---
+
+<article id="authentication">
+  <div class="progress-bar"></div>
+    <section id="begin">
+      <h3>Let's Begin!</h3>
+      <p>Minimum Viable works with any HTML5 site or application. Just include our <a href="https://github.com/minimumviable/mviable.js">open source JavaScript API</a> in your page (we recommend putting it in the <code>&lt;head&gt;</code> element, but do what works for you).</p> 
+      <script src="https://gist.github.com/3675647.js"></script>
+      <p>This part has already been done for you on this page, so let's move on.</p>
+    </section>
+    <section id="login">
+      <h3>Logging in</h3>
+      <p>Most calls to the mviable API (most notably, <code><a href="/api/mviable.html#login">mviable.sync</a></code>) require that a user be logged in first. So let's quickly walk through the authentication process.</p>
+        <p>In order for a user to log in, they (or you) need to select an OAuth2 provider. OAuth2 is a standard that many companies have implemented to allow 3rd parties (like us) to use their users' login credentials for authentication purposes, and to grant access to information they have on their sites. Companies supporting OAuth2 include Google, Facebook, and Twitter.</p>
+        <p>In this example we're going to log in using a Google account. To do this we're going to call the <code><a href="/api/mviable.html#login">mviable.login</a></code> function, passing <code>'google'</code> as the parameter. Go ahead and try this right now (if you have a Google account).</p>
+        <code class="runnable">
+          mviable.login('google');
+        </code>
+    </section>
+    <section id="user-info">
+      <h3>User Info</h3>
+      <p>Now that you're logged in, we can see a bit of information about you.</p>
+    </section>
+    <section>
+      <h3>Learn More</h3>
+      <p>What's next? Try one of the helpful tutorials:</p>
+    </section>
+</article>

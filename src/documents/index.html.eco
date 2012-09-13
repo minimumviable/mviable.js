@@ -1,0 +1,22 @@
+---
+layout: 'default'
+title: 'Minimum Viable Dev Center'
+---
+
+<div class="main-container">
+    <div class="main wrapper clearfix">
+        <article>
+            <section>
+              <h2>Gettings Started</h2>
+              <p>Try the <a href="/tutorials">interactive tutorials</a>. It's the fastest way to learn what Minimum Viable can do.</p>
+            </section>
+            <section>
+              <h2>Developer Resources</h2>
+              <p>Source Code</p>
+              <a href="https://github.com/minimumviable/mviable.js/issues">Submit a Support Ticket</a>
+              <a href="runner.html">Run the Test Suite</a>
+              <a href="https://github.com/minimumviable/mviable.js/wiki">Search the Wiki</a>
+            </section>
+        </article>
+    </div> <!-- #main -->
+</div> <!-- #main-container -->

@@ -1,5 +1,7 @@
 .jhw-cache
 .DS_store
+out
 runner.html
+node_modules
 runner.filter.html
 public/api
