@@ -25,6 +25,19 @@ describe('tutorial', function() {
   });
 
   describe('builds a progress bar', function() {
-    
+    beforeEach(function() {
+      $('body').append(
+        $('<article id="tutorial">').
+          append($('<section id="step1">')).
+          append($('<section id="step2">')));
+    });
+
+    it('hides tutorial sections that have been completed', function() {
+      // We need a library for this :-/
+      localStorage.tutorial = '["step1"]'
+      tutorial.updateProgress();
+      expect($("#step1")).not.toBeVisible();
+      expect($("#step2")).toBeVisible();
+    });
   });
 });

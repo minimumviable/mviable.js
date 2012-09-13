@@ -15,7 +15,7 @@
 
         <script src="js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
         <script src="js/mviable-0.1.js"></script>
-        <script src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+        <script src="js/tutorials/jquery-1.8.1.min.js"></script>
         <script src="js/tutorials/tutorials.js"></script>
     </head>
     <body>
@@ -50,13 +50,14 @@
                 </ul>
               </div>
               <article id="authentication">
-                  <section class="progress" name="Let's Begin">
+                <div class="progress-bar"></div>
+                  <section id="begin">
                     <h3>Let's Begin!</h3>
                     <p>Minimum Viable works with any HTML5 site or application. Just include our <a href="https://github.com/minimumviable/mviable.js">open source JavaScript API</a> in your page (we recommend putting it in the <code>&lt;head&gt;</code> element, but do what works for you).</p> 
                     <script src="https://gist.github.com/3675647.js"></script>
                     <p>This part has already been done for you on this page, so let's move on.</p>
                   </section>
-                  <section>
+                  <section id="login">
                     <h3>Logging in</h3>
                     <p>Most calls to the mviable API (most notably, <code><a href="/api/mviable.html#login">mviable.sync</a></code>) require that a user be logged in first. So let's quickly walk through the authentication process.</p>
                       <p>In order for a user to log in, they (or you) need to select an OAuth2 provider. OAuth2 is a standard that many companies have implemented to allow 3rd parties (like us) to use their users' login credentials for authentication purposes, and to grant access to information they have on their sites. Companies supporting OAuth2 include Google, Facebook, and Twitter.</p>
@@ -65,7 +66,7 @@
                         mviable.login('google');
                       </code>
                   </section>
-                  <section>
+                  <section id="user-info">
                     <h3>User Info</h3>
                     <p>Now that you're logged in, we can see a bit of information about you.</p>
                   </section>
