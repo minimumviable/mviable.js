@@ -7,5 +7,5 @@ if [[ ! -x `which jsdoc` ]]; then
   exit 1
 fi
 
-jsdoc -d api js/mviable.js 
+jsdoc -d out/api js/mviable.js 
 
