@@ -5,6 +5,8 @@ defaults="--acl-public --exclude=.DS_Store"
 bucket=s3://api.minimumviable.com
 cd $root_dir
 
+rm -rf out
+
 echo "Generating site"
 docpad generate
 

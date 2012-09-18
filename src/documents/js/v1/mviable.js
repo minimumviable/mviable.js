@@ -5,8 +5,19 @@
 (function() {
   var handlers = {};
   var host = 'cloud.minimumviable.com:8080';
+
   if (window.MViableUseLocalhost) {
     host = 'localhost:8080';
+  }
+
+  function getQueryParam(name)
+  {
+    var queryRegex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+    var result = queryRegex.exec(window.location.search);
+    if (result) {
+      return decodeURIComponent(result[1].replace(/\+/g, " "));
+    }
+    return "";
   }
 
   function hashString(str){
@@ -39,6 +50,10 @@
 
   function getOption(name) {
     return (getObj("__mviable__") || {})[name] || {};
+  }
+
+  function hasOption(name) {
+    return (getObj("__mviable__") || {})[name] !== undefined;
   }
 
   function mergeOption(name, other) {
@@ -109,7 +124,11 @@
   function syncComplete(request, updates, deletes) {
     switch(request.status) {
       case 401:
-        trigger('loginRequired');
+        if (connected()) {
+          mviable.login(getOption('userInfo').provider);
+        } else {
+          trigger('loginRequired');
+        }
         break;
       case 200:
         var newData = JSON.parse(request.responseText);
@@ -215,12 +234,30 @@
     }
   }
 
+  /**
+   * Returns true if the user has connected using an OAuth2 provider. false otherwise.
+   *
+   * @function 
+   * @name mviable#connected
+   */
+  function connected() {
+    return hasOption('userInfo');
+  }
+
   var exports = {
     login: login,
     sync: sync,
+    connected: connected,
     events: events,
     getObj: getObj,
     setObj: setObj
+  }
+
+  // Untested
+  var userInfo = getQueryParam('userInfo');
+  if (userInfo) {
+    setOption('userInfo', JSON.parse(userInfo));
+    // FIXME Remove userInfo from URL
   }
 
   if (window.localStorage) {

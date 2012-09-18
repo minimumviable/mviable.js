@@ -38,6 +38,12 @@ describe('mviable.js', function() {
     expect(items).toEqual(["item"]);
   });
 
+  it('can determine if the user has ever logged in', function() {
+    expect(mviable.connected()).toEqual(false);
+    mviable.setObj('__mviable__', {userInfo: {}});
+    expect(mviable.connected()).toEqual(true);
+  });
+  
   describe('when syncing items', function() {
     var listener, xhr, requests;
 
@@ -165,11 +171,19 @@ describe('mviable.js', function() {
     });
 
     describe('unsuccessfully', function() {
-      it('fires event if the user has not logged in', function() {
+      it('fires event if the user has never logged in', function() {
         mviable.events({ loginRequired: listener });
         mviable.sync();
         requests[0].respond(401, {}, "You must log in first");
         expect(listener).toHaveBeenCalled();
+      });
+
+      it('re-logs in if the session has expired', function() {
+        spyOn(mviable, 'login');
+        mviable.setObj("__mviable__", {userInfo: {provider: 'google'}});
+        mviable.sync();
+        requests[0].respond(401, {}, "You must log in first");
+        expect(mviable.login).toHaveBeenCalledWith("google");
       });
       
       // FIXME If the request times out

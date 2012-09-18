@@ -1,11 +1,11 @@
 #!/bin/bash
 root_dir=`dirname $0`/..
-cd $root_dir/public
+cd $root_dir/out
 
 if [[ ! -x `which jsdoc` ]]; then
   echo "Can't find jsdoc. Install from https://github.com/jsdoc3/jsdoc"
   exit 1
 fi
 
-jsdoc -d out/api js/mviable.js 
+jsdoc -d api js/v1/mviable.js 
 

@@ -1,4 +1,4 @@
-tutorial = (function () {
+tutor = (function () {
   function highlight(code) {
     return $("<code>").text(code);
   }
@@ -20,26 +20,29 @@ tutorial = (function () {
     });
   }
 
-  function updateProgress() {
-    $("article").each(function() {
-      var article = $(this);
-      var tutorialId = article.attr('id');
-      (mviable.getObj(tutorialId) || []).forEach(function(completed) {
-        var section = $("section#" + completed);
-        section.hide();
-        article.find("div.progress-bar").append(section.find('h3').clone());
-        // FIXME Add this section to the article's progress bar
-      });
-    });
+  function complete(articleId, tutorialId) {
+    var article = $("#" + articleId);
+    var section = $("section#" + tutorialId);
+    section.hide();
+    article.find("div.progress-bar").append($("<span>").text(section.find('h3').text()));
   }
 
   return {
     decorateCode: decorateCode,
-    updateProgress: updateProgress
+    complete: complete
   };
 })();
 
-$(function () {
-  tutorial.updateProgress();
-  tutorial.decorateCode();
-});
+tutorials = (function () {
+  function auth() {
+    tutor.decorateCode();
+    if (mviable.connected()) {
+      tutor.complete('authentication', 'begin');
+      tutor.complete('authentication', 'login');
+    }
+  }
+
+  return {
+    auth: auth
+  };
+})();

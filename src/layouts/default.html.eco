@@ -26,6 +26,14 @@
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 	<%- @getBlock('styles').add(["/css/normalize.css", "/css/main.css"]).toHTML() %>
 
+	<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="j/vendor/jquery.js"><\/script>')</script>
+
+	<!-- scripts concatenated and minified via build script -->
+        <%- @getBlock('scripts').add(['/js/tutorials.js', '/js/v1/mviable.js', '/vendor/log.js', '/vendor/modernizr.js'], {defer: false}).toHTML() %>
+	<!-- end scripts -->
+
 	<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 </head>
 <body>
@@ -60,15 +68,6 @@
 	<footer>
 
 	</footer>
-
-
-	<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="j/vendor/jquery.js"><\/script>')</script>
-
-	<!-- scripts concatenated and minified via build script -->
-	<%- @getBlock('scripts').add(['/vendor/log.js', '/vendor/modernizr.js', "/script.js"]).toHTML() %>
-	<!-- end scripts -->
 
         <script>
             var _gaq=[['_setAccount','UA-34674102-1'],['_trackPageview']];

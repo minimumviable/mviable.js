@@ -28,4 +28,7 @@ title: 'Authentication Tutorial'
       <h3>Learn More</h3>
       <p>What's next? Try one of the helpful tutorials:</p>
     </section>
+  <script type="text/javascript">
+    tutorials.auth();
+  </script>
 </article>

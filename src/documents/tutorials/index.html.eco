@@ -9,10 +9,10 @@ title: 'Interactive Tutorials'
         <h2>Interactive Tutorials</h2>
         <ul>
           <li>
-            <a href="auth">Login</a>
+            <a href="/tutorials/auth">Login</a>
           </li>
           <li>
-            <a href="sync">Synchronization</a>
+            <a href="/tutorials/sync">Synchronization</a>
           </li>
         </ul>
       </div>
