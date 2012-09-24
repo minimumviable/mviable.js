@@ -47,7 +47,7 @@
                     <ul>
                         <li><a href="/tutorials">Tutorials</a></li>
                         <li><a href="/api/mviable.html">API</a></li>
-                        <li><a href="mailto:support@minimumviable.com">Support</a></li>
+                        <li><a href="https://github.com/minimumviable/mviable.js/issues">Support</a></li>
                     </ul>
                 </nav>
             </header>

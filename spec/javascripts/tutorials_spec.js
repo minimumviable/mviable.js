@@ -27,20 +27,4 @@ describe('tutor', function() {
       expect(window.hello).toEqual('world');
     });
   });
-
-  describe('builds a progress bar', function() {
-    beforeEach(function() {
-      $('body').append(
-        $('<article id="tutor">').
-          append($('<section id="step1">')).
-          append($('<section id="step2">')));
-    });
-
-    it('hides tutor sections that have been completed', function() {
-      // We need a library for this :-/
-      tutor.complete('tutor', 'step1');
-      expect($("#step1")).not.toBeVisible();
-      expect($("#step2")).toBeVisible();
-    });
-  });
 });

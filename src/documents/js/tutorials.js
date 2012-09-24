@@ -16,16 +16,8 @@ tutor = (function () {
     });
   }
 
-  function complete(articleId, tutorialId) {
-    var article = $("#" + articleId);
-    var section = $("section#" + tutorialId);
-    section.hide();
-    article.find("div.progress-bar").append($("<span>").text(section.find('h3').text()));
-  }
-
   return {
     decorateCode: decorateCode,
-    complete: complete
   };
 })();
 
@@ -39,19 +31,10 @@ tutorials.auth = (function () {
   function showUserInfo() {
     $("#google-email").text(mviable.userInfo().email);
     $("#google-user-profile").show();
-    tutor.complete('authentication', 'user-info');
-  }
-
-  function updateProgress() {
-    if (mviable.connected()) {
-      tutor.complete('authentication', 'login');
-    }
-    // FIXME Need a way to mark the user info tutorial as being completed
   }
 
   return {
     connect: connect,
-    updateProgress: updateProgress,
     showUserInfo: showUserInfo
   };
 })();
