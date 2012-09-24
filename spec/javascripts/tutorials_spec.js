@@ -10,7 +10,11 @@ describe('tutor', function() {
 
   describe('runnable code snippets', function() {
     beforeEach(function() {
-      $('body').append($('<code class="runnable">').text("window.hello = 'world';"));
+      delete window.hello;
+      tutorials.test = {run: function() {
+        hello = "world";
+      }};
+      setFixtures(sandbox().append('<code class="example" tutorial="test" fn="run">'));
       tutor.decorateCode();
     });
 

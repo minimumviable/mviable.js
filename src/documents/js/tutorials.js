@@ -1,22 +1,18 @@
 tutor = (function () {
   function highlight(code) {
-    return $("<code>").text(code);
-  }
-
-  function codeRunner(code) {
-    return function() {
-      $(this).attr("disabled", true);
-      eval(code);
-    };
+    return $("<div>").addClass("code-example").text(code.toString());
   }
 
   function decorateCode() {
-    $("code.runnable").replaceWith(function() {
-      var code = $(this).html();
+    $("code.example").replaceWith(function() {
+      var code = tutorials[$(this).attr('tutorial')][$(this).attr('fn')];
       return $('<div class="code-runner">').
         append(highlight(code)).
         append($("<button>Run It!</button>").
-          click(codeRunner(code)));
+          click(function() {
+            $(this).attr("disabled", true);
+            code();
+          }));
     });
   }
 
@@ -33,16 +29,29 @@ tutor = (function () {
   };
 })();
 
-tutorials = (function () {
-  function auth() {
-    tutor.decorateCode();
+tutorials = {};
+
+tutorials.auth = (function () {
+  function connect() {
+    mviable.login('google');
+  }
+
+  function showUserInfo() {
+    $("#google-email").text(mviable.userInfo().email);
+    $("#google-user-profile").show();
+    tutor.complete('authentication', 'user-info');
+  }
+
+  function updateProgress() {
     if (mviable.connected()) {
-      tutor.complete('authentication', 'begin');
       tutor.complete('authentication', 'login');
     }
+    // FIXME Need a way to mark the user info tutorial as being completed
   }
 
   return {
-    auth: auth
+    connect: connect,
+    updateProgress: updateProgress,
+    showUserInfo: showUserInfo
   };
 })();

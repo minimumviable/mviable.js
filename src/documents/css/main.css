@@ -161,7 +161,20 @@ nav a:hover {
 }
 
 /* ==========================================================================
-   Author's custom styles
+   Tutorial main page
+   ========================================================================== */
+
+#dev-resources div { 
+  float:left; 
+  padding: 20px;
+  text-align: center;
+  width: 225px;
+}
+#dev-resources section { clear:left; }
+#dev-resources footer { clear:left; }
+
+/* ==========================================================================
+   Interactive Tutorials
    ========================================================================== */
 
 .gist-meta { display: none; }
@@ -173,6 +186,16 @@ div.progress-bar {
 div.progress-bar span {
   background: green;
   padding: 0px 5px 0px 5px;
+}
+
+.code-example {
+  white-space: pre;
+  font-family: 'Bitstream Vera Sans Mono','Courier',monospace;
+  width: 480px;
+}
+
+#userInfo {
+
 }
 
 /* ==========================================================================

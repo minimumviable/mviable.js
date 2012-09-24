@@ -3,16 +3,35 @@ layout: 'default'
 title: 'Minimum Viable Dev Center'
 ---
 
-<article>
+<article id="dev-resources">
+    <h2>Developer Resources</h2>
     <section>
-      <h2>Gettings Started</h2>
-      <p>Try the <a href="/tutorials">interactive tutorials</a>. It's the fastest way to learn what Minimum Viable can do.</p>
+      <div>
+        <a href="/tutorials">
+          <img src="/img/tutorials.png" alt="Tutorials"/>
+          <h3>Interactive Tutorials</h3>
+        </a>
+      </div>
+      <div>
+        <a href="/api/mviable.html">
+          <img src="/img/docs.png" alt="API Docs"/>
+          <h3>API Documentation</h3>
+        </a>
+      </div>
     </section>
     <section>
-      <h2>Developer Resources</h2>
-      <p>Source Code</p>
-      <a href="https://github.com/minimumviable/mviable.js/issues">Submit a Support Ticket</a>
-      <a href="runner.html">Run the Test Suite</a>
-      <a href="https://github.com/minimumviable/mviable.js/wiki">Search the Wiki</a>
+      <div>
+        <a href="https://github.com/minimumviable/mviable.js/issues">
+          <img src="/img/issues.png" alt="issues"/>
+          <h3>Support Issues</h3>
+        </a>
+      </div>
+      <div>
+        <a href="https://github.com/minimumviable/mviable.js">
+          <img src="/img/github_octocat.png" alt="github"/>
+          <h3>Github Repo</h3>
+        </a>
+      </div>
     </section>
+    <footer></footer>
 </article>

@@ -40,8 +40,14 @@ describe('mviable.js', function() {
 
   it('can determine if the user has ever logged in', function() {
     expect(mviable.connected()).toEqual(false);
-    mviable.setObj('__mviable__', {userInfo: {}});
+    mviable.setObj('__mviable__', {userInfo: {provider: "foo"}});
     expect(mviable.connected()).toEqual(true);
+  });
+
+  it('stores user information obtained during the login process', function() {
+    var userInfo = {provider: 'google', email: "foo@bar.com"};
+    mviable.setObj('__mviable__', {userInfo: userInfo});
+    expect(mviable.userInfo()).toEqual(userInfo);
   });
   
   describe('when syncing items', function() {

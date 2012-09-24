@@ -10,11 +10,14 @@
     host = 'localhost:8080';
   }
 
-  function getQueryParam(name)
+  function extractQueryParam(name)
   {
     var queryRegex = new RegExp("[\\?&]" + name + "=([^&#]*)");
     var result = queryRegex.exec(window.location.search);
     if (result) {
+      // May cause a refresh loop if we're not careful.
+      var newUrl = window.location.href.replace(queryRegex, "");
+      window.location.replace(newUrl);
       return decodeURIComponent(result[1].replace(/\+/g, " "));
     }
     return "";
@@ -50,10 +53,6 @@
 
   function getOption(name) {
     return (getObj("__mviable__") || {})[name] || {};
-  }
-
-  function hasOption(name) {
-    return (getObj("__mviable__") || {})[name] !== undefined;
   }
 
   function mergeOption(name, other) {
@@ -239,24 +238,36 @@
    *
    * @function 
    * @name mviable#connected
+   * @see mviable#login
+   */
+  function userInfo() {
+    return getOption('userInfo', {});
+  }
+
+  /**
+   * Returns true if the user has connected using an OAuth2 provider. false otherwise.
+   *
+   * @function 
+   * @name mviable#connected
    */
   function connected() {
-    return hasOption('userInfo');
+    return userInfo().provider !== undefined;
   }
 
   var exports = {
     login: login,
     sync: sync,
     connected: connected,
+    userInfo: userInfo,
     events: events,
     getObj: getObj,
     setObj: setObj
   }
 
   // Untested
-  var userInfo = getQueryParam('userInfo');
-  if (userInfo) {
-    setOption('userInfo', JSON.parse(userInfo));
+  var userInfoParam = extractQueryParam('userInfo');
+  if (userInfoParam) {
+    setOption('userInfo', JSON.parse(userInfoParam));
     // FIXME Remove userInfo from URL
   }
 
