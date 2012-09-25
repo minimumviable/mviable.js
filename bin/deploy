@@ -8,7 +8,7 @@ cd $root_dir
 rm -rf out
 
 echo "Generating site"
-docpad generate
+docpad generate --env static
 
 echo "Generating documentation"
 ./bin/doc
