@@ -24,17 +24,47 @@ tutor = (function () {
 tutorials = {};
 
 tutorials.auth = (function () {
-  function connect() {
-    mviable.login('google');
-  }
 
-  function showUserInfo() {
-    $("#google-email").text(mviable.userInfo().email);
-    $("#google-user-profile").show();
-  }
+// Not indented to preserve formatting
+
+function connect() {
+  mviable.login('google');
+}
+
+function showUserInfo() {
+  $("#google-email").text(mviable.userInfo().email);
+}
 
   return {
     connect: connect,
     showUserInfo: showUserInfo
+  };
+})();
+
+tutorials.sync = (function () {
+
+function setData() {
+  localStorage.greeting = "Hello!";
+  $('#sync-status').text('Needs Sync!');
+}
+
+function eventHandlers() {
+}
+
+function sync() {
+  mviable.events({
+    syncSuccessful: function() {
+      $('#sync-status')
+        .text('Synchronized. Minimum Viable says ' + localStorage.greeting);
+    }
+  });
+  $('#sync-status').text('syncing...');
+  mviable.sync();
+}
+
+  return {
+    setData: setData,
+    eventHandlers: eventHandlers,
+    sync: sync
   };
 })();

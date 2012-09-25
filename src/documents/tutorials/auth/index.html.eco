@@ -16,17 +16,11 @@ title: 'Authentication Tutorial'
     <code class="example" tutorial="auth" fn="connect">Enable JavaScript, please.</code>
   </section>
   <section id="user-info">
-    <h3>User Info</h3>
-    <p>Now that you're logged in, we can <a href="/api/mviable.html#login">mviable.userInfo</a> function to learn a little bit more about you. (Note that while we're using JQuery for this tutorial, the Minimum Viable library has no dependencies)</p>
+    <h3>Getting User Info</h3>
+    <p>Now that you're logged in, we can <a href="/api/mviable.html#userInfo">mviable.userInfo</a> function to learn a little bit more about you. (Note that while we're using JQuery for this tutorial, the Minimum Viable library has no dependencies)</p>
     <code class="example" tutorial="auth" fn="showUserInfo">Enable JavaScript, please.</code>
     </code>
-  </section>
-  <section id="google-user-profile" hidden='hidden'>
-    <h3>Your Google Profile</h3>
-    <table cellspacing="0">
-      <tr id='google-email'></tr>
-    </table>
-    <p>Of course, we could do a lot more with this information that just putting it in a table.</p>
+    <p>Your email address is: <span id='google-email'>????</span></p>
   </section>
   <section>
     <h3>What's Next?</h3>

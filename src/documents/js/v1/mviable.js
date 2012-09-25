@@ -6,7 +6,7 @@
   var handlers = {};
   var host = 'cloud.minimumviable.com:8080';
 
-  if (window.MViableUseLocalhost) {
+  if (sessionStorage.MViableUseLocalhost) {
     host = 'localhost:8080';
   }
 
@@ -234,11 +234,11 @@
   }
 
   /**
-   * Returns true if the user has connected using an OAuth2 provider. false otherwise.
+   * Returns the user's profile information as an object. Keys may be different depending on the OAuth2
+   * provider.
    *
    * @function 
-   * @name mviable#connected
-   * @see mviable#login
+   * @name mviable#userInfo
    */
   function userInfo() {
     return getOption('userInfo', {});
@@ -268,7 +268,6 @@
   var userInfoParam = extractQueryParam('userInfo');
   if (userInfoParam) {
     setOption('userInfo', JSON.parse(userInfoParam));
-    // FIXME Remove userInfo from URL
   }
 
   if (window.localStorage) {

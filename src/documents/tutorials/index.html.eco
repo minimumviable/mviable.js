@@ -8,12 +8,8 @@ title: 'Interactive Tutorials'
       <div id="TOC">
         <h2>Interactive Tutorials</h2>
         <ul>
-          <li>
-            <a href="/tutorials/auth">Login</a>
-          </li>
-          <li>
-            <a href="/tutorials/sync">Synchronization</a>
-          </li>
+          <a href="/tutorials/auth"><li class='login'>Authentication</li></a>
+          <a href="/tutorials/sync"><li class='sync'>Synchronization </li></a>
         </ul>
       </div>
   </section>

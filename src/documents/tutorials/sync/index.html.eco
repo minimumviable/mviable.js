@@ -6,14 +6,21 @@ title: 'Syncronization Tutorial'
 <article id="authentication">
   <h2>The Syncronization Tutorial</h2>
   <hr />
-  <section id="login">
-    <h3>Logging in</h3>
-    <p>Most calls to the mviable API (most notably, <code><a href="/api/mviable.html#sync">mviable.sync</a></code>) require that a user be logged in first. So let's quickly walk through the authentication process.</p>
-    <p>Minimum Viable works with any HTML5 site or application. Just include our <a href="https://github.com/minimumviable/mviable.js">open source JavaScript API</a> in your page (as we've done here).</p> 
-    <script src="https://gist.github.com/3675647.js"></script>
-    <p>In order for a user to log in, they (or you) need to select an OAuth2 provider. OAuth2 is a standard that many companies have implemented to allow 3rd parties (like us) to use their users' login credentials for authentication purposes, and to grant access to information they have on their sites. Companies supporting OAuth2 include Google, Facebook, and Twitter.</p>
-    <p>In this example we're going to log in using a Google account. To do this we're going to call the <code><a href="/api/mviable.html#login">mviable.login</a></code> function, passing <code>'google'</code> as the parameter. Go ahead and try this right now (if you have a Google account).</p>
-    <code class="example" tutorial="auth" fn="connect">Enable JavaScript, please.</code>
+  <section id="storing">
+    <h3>Storing User Data</h3>
+    <p>The simplest way to store user data with Minimum Viable is to put it in HTML5 localStorage. Minimum Viable will synchronize a user's localStorage with our cloud storage whenever the <code><a href="/api/mviable.html#sync">mviable.sync</a></code> function is called.</p>
+    <code class="example" tutorial="sync" fn="setData">Enable JavaScript, please.</code>
+  </section>
+  <section>
+    <h3>Synchronizing</h3>
+    <p>Despite the mildly ironic name, synchronizing changes is in fact an asynchronous operation. That means that we need to set up an event listener to notify us when the synchronization is complete. To do that, we use the <code><a href="/api/mviable.html#events">mviable.events</a></code> function. This function takes a configuration object, where the keys are event names and the value is a function that will be invoked when the event is fired. In this case, we want to listen to the <code>syncSuccessful</code> event, so that we can update the view and show that the data is saved.</p>
+    <code class="example" tutorial="sync" fn="sync">Enable JavaScript, please.</code>
+    <p><span id='sync-status'>Not Synchronized Yet</span></p>
+    <p>When synchronizing, any new keys or changed values will be pushed up to the server, and changes on the server that we don't have yet will be downloaded and merged.</p>
+  </section>
+  <section>
+    <h3>What's Next?</h3>
+    <p>Now that you know how to synchronize data, try building an application of your own.</p>
   </section>
   <script type="text/javascript">
     tutor.decorateCode();
