@@ -32,7 +32,8 @@ function connect() {
 }
 
 function showUserInfo() {
-  $("#google-email").text(mviable.userInfo().email);
+  $("#google-email")
+    .text(mviable.userInfo().email);
 }
 
   return {
@@ -48,14 +49,11 @@ function setData() {
   $('#sync-status').text('Needs Sync!');
 }
 
-function eventHandlers() {
-}
-
 function sync() {
   mviable.events({
     syncSuccessful: function() {
       $('#sync-status')
-        .text('Synchronized. Minimum Viable says ' + localStorage.greeting);
+        .text('MV says ' + localStorage.greeting);
     }
   });
   $('#sync-status').text('syncing...');
@@ -64,7 +62,6 @@ function sync() {
 
   return {
     setData: setData,
-    eventHandlers: eventHandlers,
     sync: sync
   };
 })();

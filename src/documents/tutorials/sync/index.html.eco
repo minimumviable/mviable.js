@@ -15,7 +15,7 @@ title: 'Syncronization Tutorial'
     <h3>Synchronizing</h3>
     <p>Despite the mildly ironic name, synchronizing changes is in fact an asynchronous operation. That means that we need to set up an event listener to notify us when the synchronization is complete. To do that, we use the <code><a href="/api/mviable.html#events">mviable.events</a></code> function. This function takes a configuration object, where the keys are event names and the value is a function that will be invoked when the event is fired. In this case, we want to listen to the <code>syncSuccessful</code> event, so that we can update the view and show that the data is saved.</p>
     <code class="example" tutorial="sync" fn="sync">Enable JavaScript, please.</code>
-    <p><span id='sync-status'>Not Synchronized Yet</span></p>
+    <p><span id='sync-status' class='status-field'>Not Synchronized Yet</span></p>
     <p>When synchronizing, any new keys or changed values will be pushed up to the server, and changes on the server that we don't have yet will be downloaded and merged.</p>
   </section>
   <section>

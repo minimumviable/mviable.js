@@ -20,7 +20,7 @@ title: 'Authentication Tutorial'
     <p>Now that you're logged in, we can <a href="/api/mviable.html#userInfo">mviable.userInfo</a> function to learn a little bit more about you. (Note that while we're using JQuery for this tutorial, the Minimum Viable library has no dependencies)</p>
     <code class="example" tutorial="auth" fn="showUserInfo">Enable JavaScript, please.</code>
     </code>
-    <p>Your email address is: <span id='google-email'>????</span></p>
+    <p>Your email address is: <span id='google-email' class='status-field'>????</span></p>
   </section>
   <section>
     <h3>What's Next?</h3>
