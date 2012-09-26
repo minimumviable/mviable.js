@@ -6,13 +6,15 @@ tutor = (function () {
   function decorateCode() {
     $("code.example").replaceWith(function() {
       var code = tutorials[$(this).attr('tutorial')][$(this).attr('fn')];
-      return $('<div class="code-runner">').
-        append(highlight(code)).
+      var codeDiv = $('<div class="code-runner">').
         append($("<button>Run It!</button>").
           click(function() {
             $(this).attr("disabled", true);
             code();
           }));
+      codeDiv.css('max-width', window.innerWidth);
+      codeDiv.append($('<pre>').append(highlight(code)));
+      return codeDiv;
     });
   }
 
