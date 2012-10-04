@@ -205,11 +205,13 @@
    * @function 
    * @name mviable#login
    * @param {String} provider OAuth2 provider. 'google' is currently the only supported option.
+   * @param {String} target URL to redirect to after a successful login. 
    */
-  function login(provider) {
+  function login(provider, target) {
+    target = target || window.location.toString();
     // Untested because:
     // https://groups.google.com/forum/?fromgroups#!topic/sinonjs/MMYrwKIZNUU%5B1-25%5D
-    window.location.assign("http://" + host + "/login/" + provider + "?redirect=" + window.location.toString());
+    window.location.assign("http://" + host + "/login/" + provider + "?redirect=" + target);
   }
 
   /**
